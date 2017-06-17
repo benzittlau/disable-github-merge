@@ -2,16 +2,14 @@
 
 (function($){
   var changeMergeButtonState = function() {
-    var $container = $('#js-repo-pjax-container');
-    var $buttonMerge = $container.find('.merge-message button.merge-branch-action');
-    var repoName = $('.url').find('span').text();
-    var disabled = false;
-    var buttonHtml = '';
-    var buttonMessage = '';
+    var $pageBodyContainer = $('#js-repo-pjax-container');
+    var $mergeActionsGroup = $pageBodyContainer.find('.merge-message div.btn-group-merge');
+    var repoName = window.location.pathname.match(/^\/(\w*\/\w*)\/*/)[1]
+    var buttonMessage = 'Disabled';
 
     chrome.runtime.sendMessage({from: 'content', subject: 'localStorage'}, function(response){
       if (!response) { return; }
-      var localStorage, accountsString, accountsArray;
+      var localStorage, accountsString, accountsArray, buttonTest, buttonHtml;
 
       localStorage = response.localStorage;
       if(localStorage.blacklistedAccounts) {
@@ -20,13 +18,14 @@
         accountsArray = accountsString.split(',');
 
         if(accountsArray.indexOf(repoName) !== -1) {
-          disabled = true;
-          buttonMessage =  'no merging!!';
+          buttonTest = `thisIsATest`;
+          buttonHtml = `<div class="BtnGroup btn-group-merge">
+                          <button disabled="disabled" class="btn btn-primary BtnGroup-item js-details-target">
+                            ${buttonMessage}
+                          </button>
+                        </div>`;
 
-          buttonHtml = '<span class="octicon octicon-git-merge"></span> ' +  buttonMessage;
-
-          $buttonMerge.attr('disabled', disabled);
-          $buttonMerge.html(buttonHtml);
+          $mergeActionsGroup.html(buttonHtml);
         }
       }
       });
