@@ -4,7 +4,12 @@
   <title>My Test Extension Options</title>
   <style>
     body { padding: 10px; }
-    input { width: 100% }
+    input#blacklisted_branch_to_add { width: 80% }
+    ul { list-style: none }
+    span.remove_blacklisted_branch {
+      color: red;
+      cursor: pointer;
+    }
   </style>
 
 </head>
@@ -12,12 +17,15 @@
 <body>
   <div class="container">
     <div class="content">
-      <span>Black-listed branches (csv)</span><br/>
-      <input type="text" id="blacklisted_branches" name="blacklisted_branches" placeholder="GetJobber/Jobber:master"/><br />
+      <span>Merging disabled on the following branches:</span><br/>
+      <input type="text" id="blacklisted_branch_to_add" name="blacklisted_branch" placeholder="Rails/Rails:master"/>
+      <button id="add_blacklisted_branch">Add</button>
+      <br/>
+      <ul id="blacklisted_branches"></ul>
     </div>
     <div class="buttons">
-      <div id="status"></div>
       <button id="save_btn" class="button">Save</button>
+      <div id="status"></div>
     </div>
   </div>
 

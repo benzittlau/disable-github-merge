@@ -5,9 +5,11 @@
   var $mergeActionsGroup = $pageBodyContainer.find('.merge-message div.btn-group-merge');
   var repoName = window.location.pathname.match(/^\/(\w*\/\w*)\/*/)[1]
   var targetBranchName = $('.base-ref').text();
-  var buttonMessage = 'Merging Blocked';
+  var buttonMessage = 'Merging Disabled';
 
   chrome.storage.sync.get('blackListedBranches', function(items) {
+    if(!items.blackListedBranches) { return }
+
     items.blackListedBranches.forEach(function(blackListedBranch) {
       if(blackListedBranch) {
         var blackListedRepo, blackListedBranchName;
