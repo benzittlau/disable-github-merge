@@ -19,3 +19,4 @@ Based on [Do Not Merge WIP](https://github.com/sanemat/do-not-merge-wip-for-gith
 * Reviewing the manifest.json file to make sure all the settings make sene
 * Update the version
 * Why do I have both icons and the default icon browser action default action.
+* Remove 10 second repeat

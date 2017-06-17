@@ -13,11 +13,6 @@
         "default_icon": "images/icon-128.png",
         "default_popup": "options.html"
     },
-    "background": {
-        "scripts": [
-            "scripts/background.js"
-        ]
-    },
     "options_page": "options.html",
     "content_scripts": [
         {
