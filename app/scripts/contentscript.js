@@ -5,30 +5,27 @@
     var $pageBodyContainer = $('#js-repo-pjax-container');
     var $mergeActionsGroup = $pageBodyContainer.find('.merge-message div.btn-group-merge');
     var repoName = window.location.pathname.match(/^\/(\w*\/\w*)\/*/)[1]
-    var buttonMessage = 'Disabled';
+    var targetBranchName = $('.base-ref').text();
+    var buttonMessage = 'Merging Blocked';
 
-    chrome.runtime.sendMessage({from: 'content', subject: 'localStorage'}, function(response){
-      if (!response) { return; }
-      var localStorage, accountsString, accountsArray, buttonTest, buttonHtml;
+    chrome.storage.sync.get('blackListedBranches', function(items) {
+      var blackListedBranch = items.blackListedBranches[0];
 
-      localStorage = response.localStorage;
-      if(localStorage.blacklistedAccounts) {
-        accountsString = localStorage.blacklistedAccounts;
-        accountsString = accountsString.replace(/ /g, '');
-        accountsArray = accountsString.split(',');
+      if(blackListedBranch) {
+        var blackListedRepo, blackListedBranchName;
+        [blackListedRepo, blackListedBranchName] = blackListedBranch.replace(/ /g, '').split(':');
 
-        if(accountsArray.indexOf(repoName) !== -1) {
-          buttonTest = `thisIsATest`;
-          buttonHtml = `<div class="BtnGroup btn-group-merge">
+        if(blackListedRepo == repoName && blackListedBranchName == targetBranchName) {
+          var buttonHtml = `<div class="BtnGroup btn-group-merge">
                           <button disabled="disabled" class="btn btn-primary BtnGroup-item js-details-target">
                             ${buttonMessage}
                           </button>
                         </div>`;
 
           $mergeActionsGroup.html(buttonHtml);
-        }
-      }
-      });
+        };
+      };
+    });
   };
 
   changeMergeButtonState();

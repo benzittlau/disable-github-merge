@@ -2,13 +2,15 @@
 
 (function($){
   $(function(){
-    $('#blacklisted_accounts').val(localStorage.blacklistedAccounts);
+    chrome.storage.sync.get('blackListedBranches', function(items) {
+      $('#blacklisted_branches').val(items.blackListedBranches);
+    })
 
     $('#save_btn').closest('form').submit(function(e) {
       e.preventDefault();
-      localStorage.blacklistedAccounts = $('#blacklisted_accounts').val();
-
-      window.alert('The options have been saved!');
+      chrome.storage.sync.set({'blackListedBranches': [$('#blacklisted_branches').val()]}, function(){
+        window.alert('The options have been saved!');
+      });
     });
   });
 })(jQuery);
