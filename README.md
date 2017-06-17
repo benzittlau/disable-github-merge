@@ -19,5 +19,5 @@ Based on [Do Not Merge WIP](https://github.com/sanemat/do-not-merge-wip-for-gith
 * [x] Update the version
 * [x] Why do I have both icons and the default icon browser action default action.
 * [x] Remove 10 second repeat
-* Add better docs to the options
-* Make the options allow adding multiple rows
+* [ ] Add better docs to the options
+* [ ] Make the options allow adding multiple rows

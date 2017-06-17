@@ -2,7 +2,7 @@
     "name": "Disable GitHub Merge",
     "version": "0.1.0",
     "manifest_version": 2,
-    "description": "Disables github merge button",
+    "description": "Disables the GitHub merge button for user configurable target branches",
     "icons": {
         "128": "images/icon-128.png"
     },
