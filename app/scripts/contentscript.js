@@ -1,17 +1,24 @@
 'use strict';
 
 (function($){
-  var $pageBodyContainer = $('#js-repo-pjax-container');
-  var $mergeActionsGroup = $pageBodyContainer.find('.merge-message div.btn-group-merge');
-  var repoName = window.location.pathname.match(/^\/(\w*\/\w*)\/*/)[1]
-  var targetBranchName = $('.base-ref').text();
-  var buttonMessage = 'Merging Disabled';
+  function blockIfMatching() {
+    var pullRequestPageRegex = /\/[^\/]*\/[^\/]*\/pull\/\d*/;
+    var currentPath = window.location.pathname;
 
-  chrome.storage.sync.get('blackListedBranches', function(items) {
-    if(!items.blackListedBranches) { return }
+    // This will run on every page due to being run after each GitHub PJAX
+    // page transition, so abort if it is not a pull request page.
+    if(!currentPath.match(pullRequestPageRegex)) { return };
 
-    items.blackListedBranches.forEach(function(blackListedBranch) {
-      if(blackListedBranch) {
+    var $pageBodyContainer = $('#js-repo-pjax-container');
+    var $mergeActionsGroup = $pageBodyContainer.find('.merge-message div.btn-group-merge');
+    var repoName = currentPath.match(/^\/(\w*\/\w*)\/*/)[1]
+    var targetBranchName = $('.base-ref').text();
+    var buttonMessage = 'Merging Disabled';
+
+    chrome.storage.sync.get('blackListedBranches', function(items) {
+      if(!items.blackListedBranches) { return }
+
+      items.blackListedBranches.forEach(function(blackListedBranch) {
         var blackListedRepo, blackListedBranchName;
         [blackListedRepo, blackListedBranchName] = blackListedBranch.replace(/ /g, '').split(':');
 
@@ -24,8 +31,14 @@
 
           $mergeActionsGroup.html(buttonHtml);
         };
-      };
-    })
+      })
+    });
+  };
+
+  blockIfMatching();
+  document.addEventListener('pjax:end', function () {
+      blockIfMatching();
   });
 
 })(jQuery);
+
