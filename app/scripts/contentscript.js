@@ -35,10 +35,37 @@
     });
   };
 
-  blockIfMatching();
+  function checkMutations(mutations) {
+    var filteredForMergeChanges = mutations.filter(function(mutation) {
+      return mutation.addedNodes[0].id == "partial-pull-merging"
+    })
+
+    if(filteredForMergeChanges.length > 0) { blockIfMatching(); }
+  };
+
+  // Bind to ajax updating the #partial-pull-merging area of the page directly
+  // by observing it's partent div for mutations
+
+  function registerMutationObserver() {
+    var observer = new MutationObserver(checkMutations)
+    var config = {childList: true};
+    var parent = $('#partial-pull-merging').parent()[0]
+
+    observer.observe(parent, config);
+  };
+
+  function setupBindsFollowingPageLoad() {
+    blockIfMatching();
+
+    registerMutationObserver();
+  };
+
+  setupBindsFollowingPageLoad();
+
+  // Bind to pjax page loads
   document.addEventListener('pjax:end', function () {
       blockIfMatching();
+      setupBindsFollowingPageLoad();
   });
-
 })(jQuery);
 
