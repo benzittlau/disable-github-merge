@@ -51,7 +51,9 @@
     var config = {childList: true};
     var parent = $('#partial-pull-merging').parent()[0]
 
-    observer.observe(parent, config);
+    if(parent) {
+      observer.observe(parent, config);
+    };
   };
 
   function setupBindsFollowingPageLoad() {
